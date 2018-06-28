@@ -21,6 +21,7 @@ function brainWallet(uinput, callback) {
     callback(pk, addy, balance);
 }
 
+//请求coinbase的api来得到比特币的最新价格
 function getPrice(returnPrice) {
     request({
         url: "https://api.coinbase.com/v2/prices/spot?currency=USD",
@@ -30,6 +31,7 @@ function getPrice(returnPrice) {
     });
 };
 
+//得到address对应的balance的值
 function getBalance(address, returnBalance) {
     request({
         url: "https://blockchain.info/rawaddr/" + address,
@@ -49,6 +51,8 @@ app.get("/", function(req, res){
     });
 });
 
+
+//得到比特币的最新价格
 app.get("/brain", function(req, res){
     getPrice(function(price) {
         res.render("brain", {
@@ -65,6 +69,8 @@ app.get("/converter", function(req, res){
     });
 });
 
+
+//核心方法，两个callback，首先根据用户的输入得到该 密码对应得 私钥或者公钥，然后通过api请求来获得该地址对应得钱
 app.post("/wallet", function(req, res) {
     var brainsrc = req.body.brainsrc;
     console.log(brainsrc);
